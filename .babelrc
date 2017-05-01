@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-react-jsx",
+    "react-hot-loader/babel"
+  ],
+  "presets": [
+    ["es2015", {"modules": false}],
+    "react"
+  ]
+}
