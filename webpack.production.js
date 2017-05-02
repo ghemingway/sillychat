@@ -8,7 +8,6 @@ module.exports = [
     // Client-side configuration
     {
         cache: true,
-        devtool: 'eval-source-map',
         context: `${__dirname}/src/client`,
         entry: {
             main: './main',
@@ -29,7 +28,7 @@ module.exports = [
                         loader: 'babel-loader',
                         options: {
                             babelrc: false,
-                            presets: ['es2015', 'react', 'babili'],
+                            presets: ['es2015', 'react'],
                             plugins: ['transform-react-jsx']
                         }
                     }

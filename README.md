@@ -13,9 +13,19 @@
 
 ### To Install and Run
 
+#### Development Build
+
 * ```npm install``` to install dependencies
 * ```webpack``` to build everything.
     * Make sure to watch (-w) here too if you are developing.  HMR will get out of sync since we do server side rendering for initial page load
+* Configure Redis IP & port in ./src/server/index.js
+* ```node ./src/server/index.js``` to run the server
+* Navigate to localhost:8080
+
+#### Production Build
+
+* ```npm install``` to install dependencies
+* ```webpack -p --config webpack.production.js``` to build a production-optimized version of everything.
 * Configure Redis IP & port in ./src/server/index.js
 * ```node ./src/server/index.js``` to run the server
 * Navigate to localhost:8080
