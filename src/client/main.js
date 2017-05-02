@@ -47,7 +47,7 @@ if (username) {
 }
 
 // Hot Module Replacement API
-if (module.hot && process.env.NODE_ENV !== "production") {
+if (module.hot && process.env.NODE_ENV !== 'production') {
     module.hot.accept('./components/app', () => {
         renderMain();
     });

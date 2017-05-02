@@ -10,4 +10,6 @@ html(lang="en")
             != content
         script.
             window.__PRELOADED_STATE__ = !{state}
+        if (environment && environment === 'production')
+            script(src='/js/vendor.js')
         script(src='/js/main.js')

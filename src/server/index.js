@@ -28,21 +28,22 @@ redisClient.on('ready', () => {
 
 /*****************************************************************************************************/
 
+if (process.env.NODE_ENV !== 'production') {
 // HMR Configuration
-webpackConfig = webpackConfig[0];
-let compiler = webpack(webpackConfig);
-app.use(require('webpack-dev-middleware')(compiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath
-}));
-app.use(require('webpack-hot-middleware')(compiler, {
-    log: (msg) => {
-        console.log(msg);
-    },
-    path: '/__webpack_hmr',
-    heartbeat: 10 * 1000
-}));
-
+    webpackConfig = webpackConfig[0];
+    let compiler = webpack(webpackConfig);
+    app.use(require('webpack-dev-middleware')(compiler, {
+        noInfo: true,
+        publicPath: webpackConfig.output.publicPath
+    }));
+    app.use(require('webpack-hot-middleware')(compiler, {
+        log: (msg) => {
+            console.log(msg);
+        },
+        path: '/__webpack_hmr',
+        heartbeat: 10 * 1000
+    }));
+}
 /*****************************************************************************************************/
 
 // Setup the Express Pipeline
@@ -82,7 +83,7 @@ app.models = {
 app.get('/favicon.ico', (req, res) => {
     res.sendStatus(204);
 });
-require('./build/ssr')(app);
+require('../../build/ssr')(app);
 
 
 /*****************************************************************************************************/
@@ -99,6 +100,7 @@ io.on('connection', socket => {
         console.log(`Reconnecting: ${username}`);
     }
 
+    // User requests a username to chat as
     socket.on('USERNAME:REQUEST', msg => {
         // Make sure we have latest session data
         socket.handshake.session.reload(() => {
@@ -119,12 +121,14 @@ io.on('connection', socket => {
         });
     });
 
+    // User requests full list of current users
     socket.on('USERS:REQUEST', () => {
         app.models.User.list((err, users) => {
             socket.emit('USERS:RECEIVE', users);
         });
     });
 
+    // User requests full list of comments
     socket.on('COMMENTS:REQUEST', () => {
         app.models.Comment.list((err, comments) => {
             socket.emit('COMMENTS:RECEIVE', comments);
@@ -146,13 +150,12 @@ io.on('connection', socket => {
         });
     });
 
+    // User disconnects
     socket.on('disconnect', () => {
         const username = socket.handshake.session.username;
         console.log(`Disconnect: ${username}`);
         // Let them go
         app.models.User.leave(username, (err, gone) => {
-            //socket.handshake.session.username = undefined;
-            //socket.handshake.session.save();
             if (gone) io.emit('USER:LEAVE', { username: username });
         });
     });

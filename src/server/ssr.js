@@ -54,7 +54,11 @@ module.exports = app => {
                 const state = JSON.stringify(preloadedState).replace(/</g, '\\u003c');
 
                 // Send the rendered page back to the client
-                res.render('base.pug', { content: html, state: state });
+                res.render('base.pug', {
+                    environment: process.env.NODE_ENV,
+                    content: html,
+                    state: state
+                });
             });
         });
     });
